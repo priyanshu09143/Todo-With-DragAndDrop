@@ -1,38 +1,239 @@
-.App {
-  text-align: center;
+
+*{
+  font-family: "Roboto", sans-serif;
+}
+body{
+  position: relative;
+  height: 100vh;
+  background-color: #9c27b03b;
+  color: #fff;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.form{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%) ;
+  background-color: #cb52e080;
+  padding: 2rem 4rem;
+  border-radius: 15px;
+  width: 20vw;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.form form{
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  width: 100%;
+  gap: 3rem;
+}
+.form form input{
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+
+.form form button{
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #9c27b03b;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+  width: 100%;
+}
+
+
+.form form button:hover{
+  background-color: white;
+  color: #9c27b03b;
+  color: #000;
+}
+
+.form form button:active{
+  background-color: #9c27b03b;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.form a{
+  text-decoration: none;
+  color: #dadada;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.todo{
+  width: 40vw;
+  margin: auto;
+}
+.todo .input input{
+  font-size: 1rem;
+  font-weight: 700;
+  width: 70%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 10px 0px 0px 10px;
+  outline: none;
+  border: none;
+}
+.input {
+  text-align: center;
+  width: 100%;
+}
+li{
+  list-style: none;
+  color: #000;
+}
+.todo .input button{
+  font-size: 1.5rem;
+  width: 30%;
+  font-weight: 700;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #9c27b03b;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+  border: none;
+}
+
+.todo .input button:hover{
+  background-color: white;
+  color: #000;
+}
+.todo .input button:active{
+  background-color: #9c27b03b;
+  color: white;
+}
+.list{
+  background-color: #eb76ff3b;
+  margin-top: 2rem;
+  overflow: auto;
+  max-height: 65vh;
+  min-height: 30vh;
+  width: 30vw;
+}
+
+.list ul li{
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 500;
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom:1px solid black ;
+}
+.icons svg{
+  cursor: pointer;
+  margin: 0 1rem;
+  font-size: 1.5rem;
+}
+.icons{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.signOut button{
+  position: absolute;
+  top: 5%;
+  left: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0px 10px 10px 0px ;
+  background-color: #9b27b0af;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+  border: none;
+}
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  padding-top:1rem ;
+  margin-bottom: 1rem;
+}
+.title{
+  font-size: 1rem;
+  margin: 0;
+}
+.discription{
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.shows span{
+  font-size: 1rem;
+  margin-right: 1rem;
+}
+ul{
+  padding: 0;
+}
+#date{
+  font-size: 0.8rem;
+}
+#inputDate{
+  width: 25%;
+  font-weight: 100;
+  font-size: 1rem;
+  margin: 0 1rem;
+}
+#select{
+  width: 25%;
+  padding: 0.5rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+}
+#select option{
+  padding: 0.5rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+}
+.section{
+  width: 100%;
+}
+textarea{
+  width: 28rem;
+  height: 3rem;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+
+}
+.allLists{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  align-items: start;
+}
+.heading{
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0.5rem 0;
+  margin: 0;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  border-bottom: 1px solid rgb(255 0 204 / 24%);
 }
