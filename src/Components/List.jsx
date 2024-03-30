@@ -1,14 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import {  ref, remove, update } from "firebase/database"
 import { db, auth } from "../Firebase"
 import { MdOutlineDone } from "react-icons/md";
 import toast from 'react-hot-toast';
-function List({ todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date }) {
+function List({ todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, listName }) {
   let value = todos
   const [isEdit, setIsEdit] = useState(false)
   const [tempId, setTempId] = useState("")
+  const [todoListName, setTodoListName] = useState("")
+
+useEffect(() =>{
+  console.log(value, )
+  if(value.length === 0 ) setTodoListName(listName) 
+  else setTodoListName(value[0].listName)
+},[value])
 
   const handleUpdate = (todo) => {
     setIsEdit(true)
@@ -89,7 +96,6 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
       status: status,
     })
   };
-
   return (
     <div className='allLists'>
       <div className='todoList'>
@@ -97,7 +103,7 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
          onDragOver={handleDragOver}
          onDrop={(e) => handleDrop(e, 'todo')}
         >
-          <p className='heading'>Todo</p>
+          <p className='heading'>{todoListName}</p>
           <ul>
           {renderData("todo")}
           </ul>

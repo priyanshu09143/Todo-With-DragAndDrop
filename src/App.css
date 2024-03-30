@@ -76,6 +76,7 @@ input[type=number] {
 .todo{
   width: 40vw;
   margin: auto;
+  transition: all 0.5s;
 }
 .todo .input input{
   font-size: 1rem;
@@ -102,7 +103,7 @@ li{
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: #9c27b03b;
+  background-color:#ea86fca6;
   color: white;
   cursor: pointer;
   transition: all 0.2s;
@@ -119,12 +120,13 @@ li{
   color: white;
 }
 .list{
-  background-color: #eb76ff3b;
+  background-color: #eb76ff9c;
   margin-top: 2rem;
   overflow: auto;
   max-height: 65vh;
   min-height: 30vh;
   width: 30vw;
+  border-radius: 9px;
 }
 
 .list ul li{
@@ -220,6 +222,8 @@ textarea{
   height: 3rem;
   padding: 0.4rem 1rem;
   font-size: 1rem;
+  border: none;
+  border-radius: 8px;
 
 }
 .allLists{
@@ -236,4 +240,52 @@ textarea{
   border-bottom: 1px solid #ccc;
   text-align: center;
   border-bottom: 1px solid rgb(255 0 204 / 24%);
+}
+.createList{
+  display: flex;
+  justify-content: center;
+  padding: 3rem 2rem;
+  align-items: center;
+  flex-direction: column;
+}
+.createList input{
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background-color: #9c27b03b;
+  color: white;
+  
+}
+.createList button{
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #9c27b03b;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.createList button:hover{
+  background-color: white;
+  color: #9c27b03b;
+  color: #000;
+}
+.createList input::placeholder{
+  color: rgba(255, 255, 255, 0.548);
+}
+
+.big{
+  font-size: 1rem;
+  font-weight: 700;
 }
