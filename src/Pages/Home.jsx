@@ -17,8 +17,6 @@ function Home() {
   const [listName, setListName] = useState("")
   const [message, setMessage] = useState(false)
 
-
-
   setTimeout(() => {
     setMessage(true)
   }, 2000)
@@ -35,20 +33,22 @@ function Home() {
     auth.onAuthStateChanged((user) => {
       if (user) {
         onValue(ref(db, `${auth.currentUser.uid}`), snapshot => {
-          setTodos([])
-          const data = snapshot.val()
-          if (data !== null) {
-            Object.values(data).map(todo => {
-              setTodos(todos => [...todos, todo])
-            });
-          }
-        })
+          const todosData = [];
+          snapshot.forEach((childSnapshot) => {
+            const todo = childSnapshot.val();
+            todosData.push(todo);
+          });
+  
+          // Order todos by the 'order' field
+          const orderedTodos = todosData.sort((a, b) => a.order - b.order);
+          setTodos(orderedTodos);
+        });
+      } else {
+        navigate('/login');
       }
-      if (!user) {
-        navigate('/login')
-      }
-    })
-  }, [])
+    });
+  }, []);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -74,7 +74,7 @@ function Home() {
 
   }
 
-  let value = { todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, listName }
+  let value = { todos , setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, listName }
 
   useEffect(() => {
     if (todos.length || listName !=="") setShows(true)

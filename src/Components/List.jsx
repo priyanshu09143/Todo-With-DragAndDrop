@@ -1,20 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
-import {  ref, remove, update } from "firebase/database"
+import {  onValue, ref, remove, update } from "firebase/database"
 import { db, auth } from "../Firebase"
 import { MdOutlineDone } from "react-icons/md";
 import toast from 'react-hot-toast';
-function List({ todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, listName }) {
+function List({ todos , setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, listName }) {
   let value = todos
   const [isEdit, setIsEdit] = useState(false)
   const [tempId, setTempId] = useState("")
   const [todoListName, setTodoListName] = useState("")
 
 useEffect(() =>{
-  console.log(value, )
   if(value.length === 0 ) setTodoListName(listName) 
   else setTodoListName(value[0].listName)
+
+  for(let i=0;i<value.length;i++){
+    if(value[i].listName !== ""){
+      setTodoListName(value[i].listName)
+      break;
+    }
+  }
 },[value])
 
   const handleUpdate = (todo) => {
@@ -49,6 +55,30 @@ useEffect(() =>{
     toast.success("Deleted Successfully")
   }
 
+
+  const dragItem = useRef(null)
+  const dragOverItem = useRef(null)
+
+  const handleSort =async ()=>{
+    let todos = [...value];
+    const draggedItemContent = todos.splice(dragItem.current , 1 )[0]
+    todos.splice(dragOverItem.current , 0 , draggedItemContent)
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setTodos(todos)
+
+    const updates = {};
+    todos.forEach((todo, index) => {
+      updates[todo.uid] = { ...todo, order: index };
+    });
+    await update(ref(db, `${auth.currentUser.uid}`), updates);
+
+  }
+
+  
+
+
+  
   const renderData = (state)=>{
      return value
      .filter((todo) => {
@@ -58,7 +88,9 @@ useEffect(() =>{
         return (
           <li key={index}
           draggable
-          onDragStart={(e) => handleDragStart(e, todo)}
+          onDragStart={(e) => handleDragStart(e, todo , index)}
+          onDragEnter={(e)=> dragOverItem.current = index}
+          onDragEnd={handleSort}
           >
             <div className='shows'>
               <p className='title'>Title : {todo.title}</p>
@@ -79,19 +111,18 @@ useEffect(() =>{
     
   }
 
-  const handleDragStart = (e, taskId) => {
+  const handleDragStart = (e, taskId , index) => {
+    dragItem.current = index;
     setTempId(taskId.uid)
     e.dataTransfer.setData('taskId', taskId.uid);
   };
 
   const handleDragOver = (e) => {
-    console.log('Drag Over')
     e.preventDefault();
   };
 
   const handleDrop = (e, status) => {
     e.preventDefault();
-    console.log(auth.currentUser.uid , tempId)
     update(ref(db, `${auth.currentUser.uid}/${tempId}`), {
       status: status,
     })
@@ -103,7 +134,7 @@ useEffect(() =>{
          onDragOver={handleDragOver}
          onDrop={(e) => handleDrop(e, 'todo')}
         >
-          <p className='heading'>{todoListName}</p>
+          <p className='heading'>{todoListName.toUpperCase()}</p>
           <ul>
           {renderData("todo")}
           </ul>
@@ -114,7 +145,7 @@ useEffect(() =>{
          onDragOver={handleDragOver}
          onDrop={(e) => handleDrop(e, 'process')}
         >
-          <p className='heading'>process</p>
+          <p className='heading'>PROCESS</p>
           <ul>
           {renderData("process")}
           </ul>
@@ -126,7 +157,7 @@ useEffect(() =>{
          onDragOver={handleDragOver}
          onDrop={(e) => handleDrop(e, 'finish')}
         >
-          <p className='heading'>Finish</p>
+          <p className='heading'>FINISH</p>
           <ul>
           {renderData("finish")}
           </ul>
