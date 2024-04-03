@@ -13,13 +13,8 @@ function Home() {
   const [Date, setDate] = useState("")
   const navigate = useNavigate()
   const [todos, setTodos] = useState([]);
-  const [shows, setShows] = useState(false)
-  const [listName, setListName] = useState("")
-  const [message, setMessage] = useState(false)
-
-  setTimeout(() => {
-    setMessage(true)
-  }, 2000)
+  const [status , setStatus] = useState("")
+  const [Updated, setUpdated] = useState(false)
 
   const handleSignOut = () => {
     signOut(auth)
@@ -63,8 +58,7 @@ function Home() {
       option: option,
       date: Date,
       uid: id,
-      status: "todo",
-      listName: listName,
+      status: status || "todo",
     })
     setDate("");
     setTitle("");
@@ -74,15 +68,12 @@ function Home() {
 
   }
 
-  let value = { todos , setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, listName }
+  let value = { todos , setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated}
 
-  useEffect(() => {
-    if (todos.length || listName !=="") setShows(true)
-    else setShows(false)
-  }, [todos])
+
   return (
     <>
-      {shows ? <>
+      { <>
         <div className='todo'>
           <div className="input">
             <div className="inputs">
@@ -98,19 +89,10 @@ function Home() {
                 </select>
               </div>
             </div>
-            <button onClick={handleSubmit}> Add</button>
+            <button onClick={handleSubmit} disabled={Updated} id='addbtn'> Add</button>
           </div>
         </div>
         <List {...value} /> </>
-        :
-        <div className='form createList'>
-          {
-            message ? <>
-              <input type="text" placeholder='Name Of List' value={listName} onChange={(e) => setListName(e.target.value)} />
-              <button onClick={() => setShows(true)}>Add List</button></>
-              : <p className='big'>Please Wait..!</p>
-          }
-        </div>
       }
       <div className="signOut">
         <button onClick={handleSignOut}>SignOut</button>

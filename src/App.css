@@ -289,3 +289,51 @@ textarea{
   font-size: 1rem;
   font-weight: 700;
 }
+.position{
+  position: absolute;
+  top: -10%;
+  left: 84%;
+  padding: 1rem 0.5rem;
+
+}
+.position input{
+  width: 70%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background-color: #9c27b03b;
+  color: white;
+
+}
+.position button{
+  width: 50%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #9c27b03b;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.allLists{
+  position: relative;
+  flex-wrap: wrap;
+}
+
+button:disabled{
+  cursor: no-drop;
+}
+
+#addbtn:disabled{
+  cursor: no-drop;
+
+}
