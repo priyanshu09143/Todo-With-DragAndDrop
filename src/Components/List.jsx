@@ -5,7 +5,7 @@ import { ref, remove, update } from "firebase/database"
 import { db, auth } from "../Firebase"
 import { MdOutlineDone } from "react-icons/md";
 import toast from 'react-hot-toast';
-function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date , setStatus , setUpdated}) {
+function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date , setStatus , setUpdated , setlistSelect}) {
   let value = todos
   const [isEdit, setIsEdit] = useState(false)
   const [tempId, setTempId] = useState("")
@@ -13,8 +13,9 @@ function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, t
   const [numberList, setNumberList] = useState([])
   const [totelLists, setTotelLists] = useState([])
   const [updateTrue , setUpdateTrue] = useState(false)
+  const [ currentSelected , setCurrentSelected] = useState("todo")
   setUpdated(updateTrue)
-
+  setlistSelect(currentSelected)
   value.forEach((val) => {
     if (!totelLists.includes(val.status)) {
       setTotelLists([...totelLists, val.status])
@@ -165,14 +166,19 @@ if(totelLists.includes(numberList[0])) setNumberList([])
 
       {
         totelLists
-        // .filter((state)=> state !=="")
         .map((state , index) => {
           return <div className='todoList' key={index}>
             <div className="list"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, state)}
             >
+              <div className='heading'>
               <p className='heading'>{state.toUpperCase()}</p>
+              <span>
+              <label htmlFor="" >Select List</label>
+                <input type="radio" name='selList' {...(state === "todo" ? {defaultChecked: true} : "")} onChange={(e)=> setCurrentSelected(state)}/>
+              </span>
+              </div>
               <ul>
                 {renderData(state)}
               </ul>

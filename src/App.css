@@ -337,3 +337,12 @@ button:disabled{
   cursor: no-drop;
 
 }
+.heading{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#setlab{
+ font-size: 1rem;
+ margin-right: 1rem;
+}

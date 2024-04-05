@@ -15,6 +15,7 @@ function Home() {
   const [todos, setTodos] = useState([]);
   const [status , setStatus] = useState("")
   const [Updated, setUpdated] = useState(false)
+  const [listSelect , setlistSelect] = useState("todo")
 
   const handleSignOut = () => {
     signOut(auth)
@@ -58,7 +59,7 @@ function Home() {
       option: option,
       date: Date,
       uid: id,
-      status: status || "todo",
+      status: status || listSelect || "todo",
     })
     setDate("");
     setTitle("");
@@ -68,7 +69,7 @@ function Home() {
 
   }
 
-  let value = { todos , setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated}
+  let value = { todos , setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated , setlistSelect}
 
 
   return (
@@ -89,7 +90,7 @@ function Home() {
                 </select>
               </div>
             </div>
-            <button onClick={handleSubmit} disabled={Updated} id='addbtn'> Add</button>
+            <button onClick={handleSubmit} disabled={Updated} id='addbtn'>Add</button>
           </div>
         </div>
         <List {...value} /> </>
