@@ -173,7 +173,7 @@ if(totelLists.includes(numberList[0])) setNumberList([])
               onDrop={(e) => handleDrop(e, state)}
             >
               <div className='heading'>
-              <p className='heading'>{state.toUpperCase()}</p>
+              <p className=''>{state.toUpperCase()}</p>
               <span>
               <label htmlFor="" >Select List</label>
                 <input type="radio" name='selList' {...(state === "todo" ? {defaultChecked: true} : "")} onChange={(e)=> setCurrentSelected(state)}/>
@@ -195,7 +195,13 @@ if(totelLists.includes(numberList[0])) setNumberList([])
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, item)}
             >
-              <p className='heading'>{item.toUpperCase()}</p>
+               <div className='heading'>
+              <p className=''>{item.toUpperCase()}</p>
+              <span>
+              <label htmlFor="" >Select List</label>
+                <input type="radio" name='selList' {...(item === "todo" ? {defaultChecked: true} : "")} onChange={(e)=> setCurrentSelected(item)}/>
+              </span>
+              </div>
               <ul>
                 {renderData(item)}
               </ul>
