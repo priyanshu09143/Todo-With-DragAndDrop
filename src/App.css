@@ -346,3 +346,14 @@ button:disabled{
  font-size: 1rem;
  margin-right: 1rem;
 }
+#anotherPos{
+top: 20%;
+left: 30%;
+}
+#center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-size: 1rem;
+}

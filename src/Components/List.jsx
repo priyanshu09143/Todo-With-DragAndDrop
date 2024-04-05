@@ -100,10 +100,6 @@ function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, t
        filterdData[i].option = "medium" 
        data.push(filterdData[i])
      }
-    //  else  {
-    //   filterdData[i].option = "low" 
-    //   data.push(filterdData[i])
-    // }
    }
 
    console.log(data)
