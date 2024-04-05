@@ -63,34 +63,58 @@ function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, t
   const dragItem = useRef(null)
   const dragOverItem = useRef(null)
   
-  const handleSort = async () => {
+  const handleSort = async (ente) => {
     let todos = [...value];
     const draggedItemContent = todos.splice(dragItem.current, 1)[0];
     todos.splice(dragOverItem.current, 0, draggedItemContent);
     
-    // Update priorities based on new order
-    todos.forEach((todo, index) => {
-      todo.order = index;
-      // Assuming you want to update the priority based on the order
-      switch (true) {
-        case index === 0:
-          todo.option = 'high';
-          break;
-        case index <= todos.length / 2:
-          todo.option = 'medium';
-          break;
-        default:
-          todo.option = 'low';
-          break;
+    let filterdData = todos.filter((todo) => todo.status === ente.status)
+    todos.filter((todo) => todo.status === ente.status)
+    .forEach((e , index)=>{
+      if(ente.uid === e.uid) {
+        e.order = dragOverItem.current
+        if(dragOverItem.current === 0){
+          e.option = 'high';
+          e.order = 0
+        }
+        else if(dragOverItem.current <= 1 ){
+          e.option = 'medium';
+          e.order = index + 1
+        } 
+        else {
+          e.option = 'low';
+          e.order = index +1
+        }
       }
-    });
-    
+    })
+     
+    let data = []
+  let count = 0
+   for(let i = 0; i< filterdData.length; i++){
+     if(filterdData[i].option === 'high'){
+       count++
+       data.push(filterdData[i])
+     }
+     else if(filterdData[i].option === 'high' && i+1 <= filterdData.length && count === 1){
+       filterdData[i].order = i
+       filterdData[i].option = "medium" 
+       data.push(filterdData[i])
+     }
+    //  else  {
+    //   filterdData[i].option = "low" 
+    //   data.push(filterdData[i])
+    // }
+   }
+
+   console.log(data)
+
     dragItem.current = null;
     dragOverItem.current = null;
     setTodos(todos);
   
     const updates = {};
     todos.forEach((todo) => {
+      
       updates[todo.uid] = { ...todo };
     });
     await update(ref(db, `${auth.currentUser.uid}`), updates);
@@ -109,7 +133,7 @@ function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, t
             draggable
             onDragStart={(e) => handleDragStart(e, todo, index)}
             onDragEnter={(e) => dragOverItem.current = index}
-            onDragEnd={handleSort}
+            onDragEnd={(e) => handleSort(todo)}
           >
             <div className='shows'>
               <p className='title'>Title : {todo.title}</p>
