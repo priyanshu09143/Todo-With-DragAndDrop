@@ -357,3 +357,11 @@ left: 30%;
   color: black;
   font-size: 1rem;
 }
+
+#float{
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  color: #000;
+  font-size: 1.4rem;
+}

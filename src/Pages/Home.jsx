@@ -47,7 +47,6 @@ function Home() {
     });
   }, []);
 
-
   const handleSubmit = (e) => {
     e.preventDefault()
     if (title === "" || discription === "" || Date === "") {
@@ -61,7 +60,7 @@ function Home() {
       option: option,
       date: Date,
       uid: id,
-      status: status || listSelect,
+      status:  listSelect || status,
     })
     setDate("");
     setTitle("");
@@ -75,9 +74,7 @@ function Home() {
     setData(true)
   }
 
-
   let value = { todos, setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect }
-  console.log(status)
   return (
     <>
       {(todos.length === 0 && !data) && <>
@@ -96,6 +93,7 @@ function Home() {
         <div className='todo'>
           <div className="input">
             <div className="inputs">
+             {(listSelect ==="" && status === "") && <p id='float'>Plase select Your List First</p>}
               <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} required />
               <textarea type="text" placeholder='Discription' value={discription} onChange={(e) => setDiscription(e.target.value)} required />
               <div className='section'>
@@ -111,7 +109,8 @@ function Home() {
             <button onClick={handleSubmit} disabled={Updated} id='addbtn'>Add</button>
           </div>
         </div>
-        <List {...value} /> </>
+        <List {...value} />
+         </>
       }
       <div className="signOut">
         <button onClick={handleSignOut}>SignOut</button>
