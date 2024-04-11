@@ -360,8 +360,34 @@ left: 30%;
 
 #float{
   position: absolute;
-  top: 10%;
-  left: 15%;
+  top: 27%;
+  left: 43%;
   color: #000;
   font-size: 1.4rem;
+}
+.priority{
+  display: flex;
+  position: absolute;
+  top: -19%;
+  align-items: center;
+  gap: 1rem;
+  max-width: 50%;
+}
+.priBox{
+  text-align: center;
+  background-color: #000;
+  padding: 1.5rem 3rem;
+}
+
+#drak{
+  background-color: #ad26c5fe;
+  color: #fff;
+}
+#normal {
+  background-color: #d91efa;
+  color: #fff;
+}
+#lite{
+  color: #fff;
+  background-color: #ea76ffa9;
 }

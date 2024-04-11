@@ -5,7 +5,7 @@ import { ref, remove, update } from "firebase/database"
 import { db, auth } from "../Firebase"
 import { MdOutlineDone } from "react-icons/md";
 import toast from 'react-hot-toast';
-function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect }) {
+function List({ todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect }) {
   let value = todos
   const [isEdit, setIsEdit] = useState(false)
   const [tempId, setTempId] = useState("")
@@ -64,40 +64,11 @@ function List({ todos, setTodos, setTitle, setDiscription, setOption, setDate, t
     remove(ref(db, `${auth.currentUser.uid}/${uid}`))
     toast.success("Deleted Successfully")
   }
-
-
   const dragItem = useRef(null)
-  const dragOverItem = useRef(null)
-
-
-
-  const handleSort = async () => {
-    let todos = data[selected.status];
-    setState(selected.status)
-    selected.order = dragOverItem.current
-    if (dragOverItem.current) todos[dragOverItem.current].order = dragItem.current
-    dragItem.current = null;
-    dragOverItem.current = null;
-    for(let i of todos){
-      if(i.order === 0){
-      i.option = "high"
-      }
-      else if(i.order <= 1){
-        i.option = "medium"
-      }
-      else if(todos.length -1){
-        i.option = "low"
-      }
-    }
-    todos = todos.sort((a,b) => a.order - b.order)
-    const arr = [...new Set([...todos, ...value])];
-    setTodos(arr)
-    const updates = {};
-    arr.forEach((todo) => {
-      updates[todo.uid] = { ...todo };
-    });
-    await update(ref(db, `${auth.currentUser.uid}`), updates);
-  };
+  const handlePriority =async (state)=>{
+    selected.option = state
+    await update(ref(db, `${auth.currentUser.uid}/${selected.uid}`), selected);
+  }
 
 
 useEffect(()=>{
@@ -130,10 +101,10 @@ useEffect(()=>{
       .map((todo, index) => {
         return (
           <li key={index}
+          id={todo.option === "high" ? "drak" : todo.option === "medium" ? "normal" : todo.option === "low" ? "lite" : ""}
             draggable
             onDragStart={(e) => handleDragStart(e, todo, index)}
-            onDragEnter={(e) => dragOverItem.current = index}
-            onDragEnd={(e) => handleSort(todo, state)}
+            // onDragEnd={(e) => handleSort(todo, state)}
           >
             <div className='shows'>
               <p className='title'>Title : {todo.title}</p>
@@ -232,6 +203,24 @@ useEffect(()=>{
           </div>
         ))
       }
+
+      <div className='priority'>
+        <div className="priBox" 
+        id='drak' 
+        value= "high"
+        onDragOver={(e)=> e.preventDefault()} 
+        onDrop={(e) => handlePriority("high")}>High</div>
+        <div className="priBox" 
+        id='normal' 
+        value ="normal" 
+        onDragOver={(e)=> e.preventDefault()}
+        onDrop={(e) => handlePriority("medium")}>Medium</div>
+        <div className="priBox" 
+        id='lite' 
+        value ='low' 
+        onDragOver={(e)=> e.preventDefault()}
+        onDrop={(e) => handlePriority("low")}>Low</div>
+      </div>
     </div>
   )
 }
