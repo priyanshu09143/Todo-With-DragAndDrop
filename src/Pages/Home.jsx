@@ -106,7 +106,7 @@ function Home() {
                 </select>
               </div>
             </div>
-            <button onClick={handleSubmit} disabled={Updated ? "true" : !listSelect ? "true" : ""} id='addbtn'>Add</button>
+            <button onClick={handleSubmit} disabled={Updated ? "true" : !listSelect && !status ? "true" : ""} id='addbtn'>Add</button>
           </div>
         </div>
         <List {...value} />
