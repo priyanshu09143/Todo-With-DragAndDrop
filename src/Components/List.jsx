@@ -43,7 +43,6 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
     setTempId(todo.uid)
     setStatus(todo.status)
   }
-console.log(isEdit)
   const handleUpdateConfirm = () => {
     setUpdateTrue(false)
     update(ref(db, `${auth.currentUser.uid}/${tempId}`), {
@@ -158,7 +157,6 @@ console.log(isEdit)
   }
 
   if (totelLists.includes(numberList[0])) setNumberList([])
-  console.log(totelLists , numberList)
   return (
     <div className='allLists'>
       {
