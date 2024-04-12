@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { MdDeleteForever } from "react-icons/md";
 function List({ todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect, settodoList }) {
   let value = todos
-  const [isEdit, setIsEdit] = useState(false)
+  const [isEdit, setIsEdit] = useState({index : null , status : null})
   const [tempId, setTempId] = useState("")
   const [newList, setNewList] = useState("")
   const [numberList, setNumberList] = useState([])
@@ -35,7 +35,7 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
   })
   const handleUpdate = (todo , index) => {
     setUpdateTrue(true)
-    setIsEdit(index)
+    setIsEdit({index : index , status : todo.status})
     setTitle(todo.title)
     setDiscription(todo.discription)
     setOption(todo.option)
@@ -43,7 +43,7 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
     setTempId(todo.uid)
     setStatus(todo.status)
   }
-
+console.log(isEdit)
   const handleUpdateConfirm = () => {
     setUpdateTrue(false)
     update(ref(db, `${auth.currentUser.uid}/${tempId}`), {
@@ -90,7 +90,7 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
             <span className='icons'>
               <MdDelete onClick={() => handleDelete(todo.uid)} />
               {
-                isEdit === index ? < MdOutlineDone onClick={() => handleUpdateConfirm()} /> : <MdEdit onClick={() => handleUpdate(todo , index)} />
+                isEdit.index === index && isEdit.status === todo.status ? < MdOutlineDone onClick={() => handleUpdateConfirm()} /> : <MdEdit onClick={() => handleUpdate(todo , index)} />
               }
             </span>
           </li>
@@ -158,7 +158,7 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
   }
 
   if (totelLists.includes(numberList[0])) setNumberList([])
-
+  console.log(totelLists , numberList)
   return (
     <div className='allLists'>
       {

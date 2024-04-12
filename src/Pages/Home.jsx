@@ -73,7 +73,6 @@ function Home() {
     setDiscription("");
     setOption("none");
     toast.success("Todo Added Successfully")
-
   }
   let value = { todos, setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect , settodoList }
   return (
