@@ -97,7 +97,7 @@ function Home() {
                   {
                     todoList !== undefined && todoList.map((list, index) => {
                       return (
-                        <option key={index} value={list}>{list}</option>
+                        <option key={index} value={list}>{list.toUpperCase()}</option>
                       )
                     })
                   }

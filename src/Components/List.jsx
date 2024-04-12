@@ -33,9 +33,9 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
     if (!data.hasOwnProperty(todo.status)) data[todo.status] = []
     data[todo.status].push(todo)
   })
-  const handleUpdate = (todo) => {
+  const handleUpdate = (todo , index) => {
     setUpdateTrue(true)
-    setIsEdit(true)
+    setIsEdit(index)
     setTitle(todo.title)
     setDiscription(todo.discription)
     setOption(todo.option)
@@ -86,11 +86,11 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
               <p className='title'>Title : {todo.title}</p>
               <p className='discription'>Discription : {todo.discription}</p>
               <span id='date'>Date : {todo.date}</span>
-              <span>Priority: {todo.option}</span></div>
+              <span>Priority: {todo.option.toUpperCase()}</span></div>
             <span className='icons'>
               <MdDelete onClick={() => handleDelete(todo.uid)} />
               {
-                isEdit ? < MdOutlineDone onClick={() => handleUpdateConfirm()} /> : <MdEdit onClick={() => handleUpdate(todo)} />
+                isEdit === index ? < MdOutlineDone onClick={() => handleUpdateConfirm()} /> : <MdEdit onClick={() => handleUpdate(todo , index)} />
               }
             </span>
           </li>

@@ -383,12 +383,15 @@ left: 30%;
 #drak{
   background-color: #ad26c5fe;
   color: #fff;
+  cursor: move;
 }
 #normal {
   background-color: #d91efa;
+  cursor: move;
   color: #fff;
 }
 #lite{
   color: #fff;
+  cursor: move;
   background-color: #ea76ffa9;
 }
