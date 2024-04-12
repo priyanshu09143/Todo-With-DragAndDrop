@@ -5,7 +5,8 @@ import { ref, remove, update } from "firebase/database"
 import { db, auth } from "../Firebase"
 import { MdOutlineDone } from "react-icons/md";
 import toast from 'react-hot-toast';
-function List({ todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect }) {
+import { MdDeleteForever } from "react-icons/md";
+function List({ todos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect, settodoList }) {
   let value = todos
   const [isEdit, setIsEdit] = useState(false)
   const [tempId, setTempId] = useState("")
@@ -13,11 +14,13 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
   const [numberList, setNumberList] = useState([])
   const [totelLists, setTotelLists] = useState([])
   const [updateTrue, setUpdateTrue] = useState(false)
-  const [currentSelected, setCurrentSelected] = useState("")
   const [selected, setSelected] = useState(null)
-  const [state, setState] = useState("")
-  setUpdated(updateTrue)
-  setlistSelect(currentSelected)
+
+  useEffect(() => {
+    settodoList([...totelLists, ...numberList])
+    setUpdated(updateTrue)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totelLists, numberList, updateTrue])
 
   value.forEach((val) => {
     if (!totelLists.includes(val.status)) {
@@ -65,46 +68,19 @@ function List({ todos, setTitle, setDiscription, setOption, setDate, title, disc
     toast.success("Deleted Successfully")
   }
   const dragItem = useRef(null)
-  const handlePriority =async (state)=>{
+  const handlePriority = async (state) => {
     selected.option = state
     await update(ref(db, `${auth.currentUser.uid}/${selected.uid}`), selected);
   }
-
-
-useEffect(()=>{
-  console.log(value.filter((todo)=> todo.status === state))
-  value.filter((todo)=> todo.status === state)
-  .map((todo , index)=> {
-    if(index === 0) todo.order = 0
-    else if(index <= 1) todo.order = index
-
-    if(todo.order === 0){
-      todo.option = "high"
-    }
-    else if(todo.order <= 1){
-      todo.option = "medium"
-    }
-    else if(value.length -1){
-      todo.option = "low"
-    }
-    return todo
-  })
-  setState("")
-},[value , state])
-
-
-  
-
   const renderData = (state) => {
     if (data[state] === undefined || data[state] === "" || data[state] === null) return
     return data[state].sort((a, b) => a.order - b.order)
       .map((todo, index) => {
         return (
           <li key={index}
-          id={todo.option === "high" ? "drak" : todo.option === "medium" ? "normal" : todo.option === "low" ? "lite" : ""}
+            id={todo.option === "high" ? "drak" : todo.option === "medium" ? "normal" : todo.option === "low" ? "lite" : ""}
             draggable
             onDragStart={(e) => handleDragStart(e, todo, index)}
-            // onDragEnd={(e) => handleSort(todo, state)}
           >
             <div className='shows'>
               <p className='title'>Title : {todo.title}</p>
@@ -143,14 +119,49 @@ useEffect(()=>{
 
 
   function createList() {
+    if(newList.trim().length === 0){
+      toast.error("Please Enter Valid List Name")
+      return
+    }
+    let allLists = [...totelLists, ...numberList]
+    allLists = allLists.map((e)=> e.toLowerCase());
+    if (allLists.includes(newList.toLocaleLowerCase())) {
+      setNewList("")
+      toast.error(`List already exists"${newList}"`)
+      return
+    }
     setNumberList([...numberList, newList])
     toast.success(`List created`);
     setNewList("")
   }
+
+  function removeList(state) {
+
+    if (numberList.includes(state)) {
+      let data = [...numberList]
+      data.splice(data.indexOf(state), 1)
+      setNumberList(data)
+    }
+    else {
+      let data = [...totelLists, ...numberList]
+      let index = (data.indexOf(state))
+      data.splice(index, 1)
+      // eslint-disable-next-line array-callback-return
+      value.filter((e) => e.status === state).map((e) => {
+        remove(ref(db, `${auth.currentUser.uid}/${e.uid}`))
+
+      })
+      setTotelLists([...data])
+    }
+
+    toast.success(`List "${state}" Delete Success`)
+  }
+
   if (totelLists.includes(numberList[0])) setNumberList([])
+
   return (
     <div className='allLists'>
-      {totelLists.length !== 0 &&
+      {
         <div className='form createList position'>
           <>
             <input type="text" placeholder='Name Of List' value={newList} onChange={(e) => setNewList(e.target.value)} />
@@ -167,10 +178,9 @@ useEffect(()=>{
                 onDrop={(e) => handleDrop(e, state)}
               >
                 <div className='heading'>
-                  <p className=''>{state}</p>
+                  <p className=''>{state.toUpperCase()}</p>
                   <span>
-                    <label htmlFor="" >Select List</label>
-                    <input type="radio" name='selList' onChange={(e) => setCurrentSelected(state)} />
+                    <MdDeleteForever onClick={() => removeList(state)} />
                   </span>
                 </div>
                 <ul>
@@ -183,17 +193,16 @@ useEffect(()=>{
       }
 
       {
-        numberList.map((item) => (
-          <div className='todoList'>
+        numberList.map((item, index) => (
+          <div className='todoList' key={index}>
             <div className="list"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, item)}
             >
               <div className='heading'>
-                <p className=''>{item}</p>
+                <p className=''>{item.toUpperCase()}</p>
                 <span>
-                  <label htmlFor="" >Select List</label>
-                  <input type="radio" name='selList' onChange={(e) => setCurrentSelected(item)} />
+                  <MdDeleteForever onClick={() => removeList(item)} />
                 </span>
               </div>
               <ul>
@@ -205,21 +214,21 @@ useEffect(()=>{
       }
 
       <div className='priority'>
-        <div className="priBox" 
-        id='drak' 
-        value= "high"
-        onDragOver={(e)=> e.preventDefault()} 
-        onDrop={(e) => handlePriority("high")}>High</div>
-        <div className="priBox" 
-        id='normal' 
-        value ="normal" 
-        onDragOver={(e)=> e.preventDefault()}
-        onDrop={(e) => handlePriority("medium")}>Medium</div>
-        <div className="priBox" 
-        id='lite' 
-        value ='low' 
-        onDragOver={(e)=> e.preventDefault()}
-        onDrop={(e) => handlePriority("low")}>Low</div>
+        <div className="priBox"
+          id='drak'
+          value="high"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handlePriority("high")}>High</div>
+        <div className="priBox"
+          id='normal'
+          value="normal"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handlePriority("medium")}>Medium</div>
+        <div className="priBox"
+          id='lite'
+          value='low'
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handlePriority("low")}>Low</div>
       </div>
     </div>
   )

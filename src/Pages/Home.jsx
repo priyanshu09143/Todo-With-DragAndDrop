@@ -16,8 +16,9 @@ function Home() {
   const [todos, setTodos] = useState([]);
   const [status, setStatus] = useState("")
   const [Updated, setUpdated] = useState(false)
-  const [listSelect, setlistSelect] = useState("todo")
-  const [data, setData] = useState(false)
+  const [listSelect, setlistSelect] = useState("none")
+  const [todoList, settodoList] = useState([])
+
 
   const handleSignOut = () => {
     signOut(auth)
@@ -36,8 +37,6 @@ function Home() {
             const todo = childSnapshot.val();
             todosData.push(todo);
           });
-
-          // Order todos by the 'order' field
           const orderedTodos = todosData.sort((a, b) => a.order - b.order);
           setTodos(orderedTodos);
         });
@@ -45,12 +44,19 @@ function Home() {
         navigate('/login');
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault()
+   
     if (title === "" || discription === "" || Date === "") {
       toast.error("Please fill all fields")
+      return
+    }
+    if(listSelect === "none"){
+      if(todos.length > 0)toast.error("Please select a list")
+      else toast.error("Please select a list or Create a new list")
       return
     }
     const id = uid();
@@ -60,7 +66,7 @@ function Home() {
       option: option,
       date: Date,
       uid: id,
-      status:  listSelect || status,
+      status: listSelect || status,
     })
     setDate("");
     setTitle("");
@@ -69,31 +75,13 @@ function Home() {
     toast.success("Todo Added Successfully")
 
   }
-
-  const updateStatus = () => {
-    setData(true)
-  }
-
-  let value = { todos, setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect }
+  let value = { todos, setTodos, setTitle, setDiscription, setOption, setDate, title, discription, option, Date, setStatus, setUpdated, setlistSelect , settodoList }
   return (
     <>
-      {(todos.length === 0 && !data) && <>
-        <div className='form createList position ' id='anotherPos'>
-        
-            <>
-            <input type="text" placeholder='Name Of List' value={status} onChange={e => setStatus(e.target.value)} required />
-              <button onClick={updateStatus} disabled={data} >Add List</button>
-              <p id='center'>{data ? "Add Data In List " : "Please Enter List Name "}</p>
-              </>
-          
-        </div>
-      </>
-      }
-      {(todos.length !== 0 || data) && <>
+      {<>
         <div className='todo'>
           <div className="input">
             <div className="inputs">
-             {(listSelect ==="" && status === "") && <p id='float'>Plase select Your List First</p>}
               <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} required />
               <textarea type="text" placeholder='Discription' value={discription} onChange={(e) => setDiscription(e.target.value)} required />
               <div className='section'>
@@ -104,13 +92,23 @@ function Home() {
                   <option value="medium">Medium</option>
                   <option value="high">High</option>
                 </select>
+                <select name="" id='select' onChange={(e)=> setlistSelect(e.target.value)}>
+                  <option value="none" disabled selected>Select List</option>
+                  {
+                    todoList !== undefined && todoList.map((list, index) => {
+                      return (
+                        <option key={index} value={list}>{list}</option>
+                      )
+                    })
+                  }
+                </select>
               </div>
             </div>
-            <button onClick={handleSubmit} disabled={Updated ? "true" : !listSelect && !status ? "true" : ""} id='addbtn'>Add</button>
+            <button onClick={handleSubmit} disabled={Updated} id='addbtn'>Add</button>
           </div>
         </div>
         <List {...value} />
-         </>
+      </>
       }
       <div className="signOut">
         <button onClick={handleSignOut}>SignOut</button>
